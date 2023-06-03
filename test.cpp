@@ -11,13 +11,12 @@ using std::string;
 
 #include "Array.h"
 
-//int Count::x = 1000;
 
 
 
 int main()
 { 
    
-   
+cout << "checking git";
    return 0 ;
 }
