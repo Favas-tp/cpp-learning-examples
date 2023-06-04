@@ -13,7 +13,7 @@ class Array
     friend istream& operator>>( istream &, Array & );
 
  public:
-    Array( int = 10 );
+    explicit Array( int = 10 ); //avoiding implicit conversion 
     Array( const Array & );
     ~Array();
     int getSize() const;
