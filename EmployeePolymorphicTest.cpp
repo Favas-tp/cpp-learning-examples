@@ -9,66 +9,50 @@ using std::setprecision;
 #include <vector>
 using std::vector;
 
+#include <typeinfo>
+
 #include "EmployeeN.h"
 #include "SalariedEmployeeN.h"
 #include "HourlyEmployeeN.h"
 #include "CommissionEmployeeN.h"
 #include "BasePlusCommissionEmployeeN.h"
 
-void virtualViaPointer( const Employee * const );
-void virtualViaReference( const Employee & );
-
 int main()
 {
     cout << fixed << setprecision( 2 );
-    SalariedEmployee salariedEmployee( "john", "snith", "111-11-1111", 800 );
-    HourlyEmployee hourlyEmployee( "karen", "price", "222-22-2222", 16.75, 40 );
-    CommissionEmployee commissionEmployee( "sue", "jones", "333-33-3333", 10000, .06 );
-    BasePlusCommissionEmployee basePlusCommissionEmployee( "bob", "lewis", "444-44-4444", 5000, .04, 300 );
-
-    cout << "Employees processed individually using static binding: \n\n";
-
-    salariedEmployee.print();
-    cout << "\nearned: " << salariedEmployee.earnings() << "\n\n";
-    hourlyEmployee.print();
-    cout << "\nearned: " << hourlyEmployee.earnings() << "\n\n";
-    commissionEmployee.print();
-    cout << "\nearned: " << commissionEmployee.earnings() << "\n\n";
-    basePlusCommissionEmployee.print();
-    cout << "\nearned: " << basePlusCommissionEmployee.earnings() << "\n\n";
-
     vector < Employee * > employees( 4 );
-
-    employees[ 0 ] = &salariedEmployee;
-    employees[ 1 ] = &hourlyEmployee;
-    employees[ 2 ] = &commissionEmployee;
-    employees[ 3 ] = &basePlusCommissionEmployee;
-
-    cout << "Employees processeed polymorphically via dynamic binding: \n\n";
-
-    cout << "virtual function calls made off base - class pointers:\n\n";
+   
+    employees[ 0 ] = new  SalariedEmployee( "john", "snith", "111-11-1111", 800 );
+    employees[ 1 ] = new HourlyEmployee( "karen", "price", "222-22-2222", 16.75, 40 );
+    employees[ 2 ] = new CommissionEmployee( "sue", "jones", "333-33-3333", 10000, .06 );
+    employees[ 3 ] = new BasePlusCommissionEmployee( "bob", "lewis", "444-44-4444", 5000, .04, 300 );
 
     for( size_t i = 0; i < employees.size() ; i++ )
-        virtualViaPointer( employees[ i ] );
+    {
+        employees[ i ] -> print();
+        cout << endl;
 
-    cout << "virtual function calls made off base - class references:\n\n";
+        BasePlusCommissionEmployee *derivedPtr = dynamic_cast <BasePlusCommissionEmployee *> ( employees[ i ] );
 
-    for( size_t i = 0; i < employees.size() ; i++ )
-        virtualViaReference( *employees[ i ] );
+        if( derivedPtr != 0 )
+        {
+            double oldBaseSalary = derivedPtr->getBaseSalary();
+            cout << "Old base salary: " << oldBaseSalary << endl;
+            derivedPtr->setBaseSalary( 1.10 * oldBaseSalary );
+            cout << "new base salary with 10% increase is: " <<  derivedPtr->getBaseSalary()  << endl;
+        }
+
+        cout << "\nearned " << employees[ i ] -> earnings() << "\n\n";
+
+    }
+    
+    for( size_t j = 0; j < employees.size() ; j++ )
+    {
+        cout << "Deleting object of " << typeid( *employees[ j ] ).name() << endl;
+
+        delete employees[ j ];
+    }
 
     return 0;    
-}
-
-
-void virtualViaPointer( const Employee * const baseClassPtr )
-{
-    baseClassPtr -> print();
-    cout << "\nearned " << baseClassPtr -> earnings() << "\n\n";
-}
-
-void virtualViaReference( const Employee & baseClassRef )
-{
-    baseClassRef.print();
-    cout << "\nearned " << baseClassRef.earnings() << "\n\n";
 }
 
