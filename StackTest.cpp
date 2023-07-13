@@ -2,46 +2,38 @@
 using std::cout;
 using std::endl;
 
+#include <string>
+using std::string;
+
 #include "Stack.h"
 
+template< typename T >
+void testStack( Stack< T > &theStack, T value, T increment, const string stackName )
+{
+    cout << "Pushing element onto " << stackName << '\n';
+
+    while( theStack.push( value ) )
+    {
+        cout << value << ' ';
+        value += increment;
+    }
+
+    cout << "\nStack is full, cannot push " << value
+    << "\n\nPoping elements from " << stackName << "\n";
+
+    while( theStack.pop( value ) )
+       cout << value << ' ';
+
+    cout << "\nStack is empty. cannot pop\n" << endl;
+
+}
 int main()
 {
     Stack< double > doubleStack( 5 );
-    double doubleValue = 1.1;
-
-    cout << "Pushing element onto double stack\n";
-
-    while( doubleStack.push( doubleValue ) )
-    {
-        cout << doubleValue << ' ';
-        doubleValue += 1.1;
-    }
-
-    cout << "\nStack is full, cannot push " << doubleValue
-    << "\n\nPoping double elements from stack\n";
-
-    while( doubleStack.pop( doubleValue ) )
-       cout << doubleValue << ' ';
-
-    cout << "\nStack is empty. cannot pop\n";
-
     Stack< int > intStack;
-    int intValue = 1;
+    
+    testStack( doubleStack, 1.1, 1.1, "doubleStack" );
+    testStack( intStack, 1, 1, "intStack" );
 
-    cout << "\n\nPushing element onto int stack\n";
-
-    while( intStack.push( intValue ) )
-    {
-        cout << intValue << ' ';
-        intValue++;
-    }
-
-    cout << "\nStack is full, cannot push " << intValue
-    << "\n\nPoping int elements from stack\n";
-
-    while( intStack.pop( intValue ) )
-       cout << intValue << ' ';
-
-    cout << "\nStack is empty. cannot pop\n";
     return 0;
 }
