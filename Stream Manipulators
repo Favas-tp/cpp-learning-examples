@@ -1,0 +1,16 @@
+#include<iostream>
+using std::cout;
+using std::cin;
+using std::endl;
+
+int main()
+{
+    const int SIZE = 100;
+    char buffer[ SIZE ];
+    cout << "enter sentence\n";
+    cin.read( buffer, 20 );
+    cout << endl << "the sentence enterd was:" << endl;
+    cout.write(buffer, cin.gcount());
+    cout << endl;
+    return 0;
+}
